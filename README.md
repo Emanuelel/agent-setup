@@ -2,12 +2,12 @@
 
 **One set of rules, helpers and checkpoints for my AI coding agents, shared by Codex and Claude Code.**
 
-I build products with AI coding agents (OpenAI Codex and Anthropic's Claude Code). Out of the box,
-each tool needs its own instructions, and every new project starts from zero. This repo fixes
+I build products with AI coding agents. 
+Out of the box, each tool needs its own instructions, and every new project starts from zero. This repo fixes
 that: one install gives both tools the same global rules, the same helper agents, the same
 automatic quality checkpoint and the same project documentation structure, in every project.
 
-The design follows what the tool makers and practitioners recommend as of late 2026:
+The design follows what I've found working for me as of late 2026:
 short instruction files, subagents for reading rather than writing, a fresh-context reviewer
 instead of self-review, and "done" defined by checks that actually ran.
 
