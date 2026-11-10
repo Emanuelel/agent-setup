@@ -1,6 +1,6 @@
 ---
 name: project-docs
-description: Set up or repair the standard project documentation structure (AGENTS.md map, CLAUDE.md pointer, docs/ PRODUCT, DESIGN, ARCHITECTURE, DECISIONS, STATUS, CHANGELOG, and scripts/verify.sh). Use when a project has no AGENTS.md or no docs/ folder, or when the user asks to set up or refresh project docs.
+description: Set up or repair the standard project documentation structure (AGENTS.md map, CLAUDE.md pointer, docs/ PRODUCT, DESIGN, ARCHITECTURE, DECISIONS, STATUS, CHANGELOG) and wire up automatic checks in scripts/verify.sh (lint, types, tests, project rules). Use when a project has no AGENTS.md or no docs/ folder, or when the user asks to set up or refresh project docs.
 ---
 
 # Project docs setup
@@ -38,17 +38,35 @@ shape; replace every `<...>` placeholder with real content or delete the line.
      If a CLAUDE.md already exists without that line, add `@AGENTS.md` as its first line.
    - `docs/PRODUCT.md`, `docs/DESIGN.md`, `docs/ARCHITECTURE.md`,
      `docs/DECISIONS.md`, `docs/STATUS.md`, `docs/CHANGELOG.md`.
-   - `scripts/verify.sh`: the project's FAST checks only (lint, typecheck, unit tests),
-     finishing in under ~2 minutes. Use the real commands you found in step 2.
-     If the project has no checks yet, leave the template's `exit 0` stub and say so.
-     Make it executable (`chmod +x scripts/verify.sh`).
+   - `scripts/verify.sh`: copy the template and make it executable
+     (`chmod +x scripts/verify.sh`). It finds and runs the lint, format, type and test
+     tools the project already has. Then follow step 5.
 
-5. **Fill content with care:**
+5. **Make the checks real.** Run `scripts/verify.sh` and read what it ran. The goal is
+   that every project checks formatting, lint, types and tests automatically, because a
+   check is enforced while a written rule is only advice. If something is missing for the
+   stack, propose the standard tool, and ask the user before installing anything (new
+   dependencies need their OK):
+
+   | Stack | Lint and format | Types | Tests |
+   |---|---|---|---|
+   | Expo / React Native | `npx expo lint` (sets up ESLint) | TypeScript with `"strict": true` | `jest-expo` |
+   | Web (TypeScript) | ESLint + Prettier, or Biome | `tsc --noEmit`, `"strict": true` | Vitest |
+   | Python | Ruff (`ruff check`, `ruff format`) | mypy, or pyright | pytest |
+
+   Add a `lint`, `typecheck` and `test` (or `test:ci`) script to `package.json` so
+   `verify.sh` finds them. If a check fails on existing code, don't fix the whole codebase
+   now: tell the user how much fails and ask how to proceed. If the project has hard rules
+   from step 3 that a machine can check, add them as `forbid` lines in section 2 of
+   `verify.sh`, each with a message that explains the fix.
+
+6. **Fill content with care:**
    - Docs explain what the code can't: intent, decisions, conventions, current state.
    - Don't write a tour of the file tree; the AGENTS.md map lists only key places.
    - Keep each doc short (about 100 lines). If something grows, split it into a sub-file
      in `docs/` and link it from AGENTS.md.
 
-6. **Finish:** run `scripts/verify.sh` once, add a CHANGELOG entry
-   ("Set up project docs structure"), and tell the user in plain language which files
-   were created, which were left as TODO, and what you need from them.
+7. **Finish:** list what `verify.sh` checks in the "Enforced by checks" section of
+   AGENTS.md, add a CHANGELOG entry ("Set up project docs structure"), and tell the user in
+   plain language which files were created, which checks run, which were left as TODO,
+   and what you need from them.

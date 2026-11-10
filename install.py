@@ -297,12 +297,20 @@ def install_skill(parent, remove=False):
         return
     if os.path.exists(marker) and tree_digest(src) == tree_digest(dest):
         return  # already up to date
-    if os.path.exists(dest):
-        if not os.path.exists(marker):
-            backup(dest)
-            say(f"{short(dest)} existed and wasn't ours: saved a backup before replacing it")
-        shutil.rmtree(dest)
-    shutil.copytree(src, dest)
+    if os.path.exists(dest) and not os.path.exists(marker):
+        backup(dest)
+        say(f"{short(dest)} existed and wasn't ours: saved a backup before replacing it")
+    # Update in place: overwrite our files, then tidy up files the repo no longer has.
+    shutil.copytree(src, dest, dirs_exist_ok=True)
+    wanted = {os.path.relpath(os.path.join(b, f), src) for b, _, fs in os.walk(src) for f in fs}
+    for base, _, files in os.walk(dest):
+        for name in files:
+            rel = os.path.relpath(os.path.join(base, name), dest)
+            if rel not in wanted and name != ".installed-by-agent-setup":
+                try:
+                    os.remove(os.path.join(base, name))
+                except OSError:
+                    pass
     vs = os.path.join(dest, "templates", "scripts", "verify.sh")
     if os.path.exists(vs):
         os.chmod(vs, 0o755)

@@ -38,6 +38,9 @@ check each match before replacing, and read the diff afterwards.
 - If `scripts/verify.sh` exists, run it before saying you're done. Never claim tests pass
   without running them. Never delete or weaken tests to make them pass.
 - If the stop hook sends you back, follow it.
+- When the same kind of mistake shows up twice (caught by the user, the reviewer or a
+  check), turn it into a lint rule or test in `scripts/verify.sh`, with an error message
+  that says how to fix it. Prefer a check over another line of instructions.
 
 ## Keep docs current
 After any task that changed code: add a line to `docs/CHANGELOG.md`, update

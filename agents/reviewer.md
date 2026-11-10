@@ -27,4 +27,7 @@ How to report:
 - Only report real problems you can point to. Do not flag style preferences.
   If you are unsure, say so and mark it low.
 - If you find nothing serious, say so plainly. "No critical or high issues" is a valid result.
+- If a finding is something a machine could catch every time (a forbidden import, a banned
+  function, a missing type, a naming pattern), add "could be a check" and suggest the
+  one-line `forbid` rule or lint rule for `scripts/verify.sh`.
 - Keep the report under ~40 lines.

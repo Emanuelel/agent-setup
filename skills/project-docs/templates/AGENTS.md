@@ -27,6 +27,13 @@
 - <Things never to touch, e.g. "Don't edit generated files in `src/gen/`".>
 - <Conventions, e.g. "Use the existing `api/client.ts` for every HTTP call".>
 
+## Enforced by checks
+`scripts/verify.sh` runs automatically before an agent finishes. It currently checks:
+- <e.g. lint (ESLint), types (tsc strict), tests (Jest)>
+- <project rules added as `forbid` lines, e.g. "no console.log in src/">
+
+When the same mistake happens twice, add a check for it there instead of a new rule here.
+
 ## Keeping docs current
 After any task that changed code: add a line to `docs/CHANGELOG.md`, update
 `docs/STATUS.md`, and record real choices in `docs/DECISIONS.md`.

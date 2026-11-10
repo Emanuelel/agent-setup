@@ -70,6 +70,10 @@ any-project/
     └── CHANGELOG.md
 ```
 
+**Rules become checks.** `scripts/verify.sh` runs each project's lint, type and test tools,
+plus one-line project rules. When the same mistake happens twice, it becomes a new check with
+an error message that explains the fix, so the agent can't repeat it.
+
 ## My skills
 
 52 skills, 46 of them in both tools. Full list: [`docs/SKILLS.md`](docs/SKILLS.md).
